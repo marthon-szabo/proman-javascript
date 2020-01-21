@@ -15,7 +15,20 @@ export let dom = {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
 
-        let boardList = '';
+        let table = document.querySelector("#boards");
+
+        for (let board of boards){
+            table.insertAdjacentHTML("beforeend",
+                `
+            <div class="board-container">
+                <div class="board-title">${board.title}</div>
+                <div class="board-content"></div>
+            </div>
+            `
+            )
+
+        }
+        /*let boardList = '';
 
         for(let board of boards){
             boardList += `
@@ -31,6 +44,8 @@ export let dom = {
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+
+         */
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
