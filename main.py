@@ -50,8 +50,9 @@ def signup():
     signup_username = request.form['username']
     signup_password = request.form['password']
     signup_confirm_password = request.form['confirm_password']
-
+    print(data_handler.verify_password("abc", "abc"))
     return render_template("signup.html")
+
 
 @app.route("/login")
 def login():
