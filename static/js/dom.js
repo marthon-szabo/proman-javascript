@@ -1,6 +1,5 @@
 // It uses data_handler.js to visualize elements
 import { dataHandler } from "./data_handler.js";
-
 export let dom = {
     init: function () {
         // This function should run once, when the page is loaded.
@@ -41,3 +40,4 @@ export let dom = {
     },
     // here comes more features
 };
+dom.loadBoards();
