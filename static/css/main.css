@@ -1,3 +1,9 @@
-#boards {
+#board {
+    width: 40%;
+    height: 40%;
+    size: 40px;
+    border: 1px solid red;
     background-color: green;
+    display: block;
 }
+
