@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from util import json_response
 
 import data_handler
@@ -41,12 +41,16 @@ def main():
         app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon/favicon.ico'))
 
 
-@app.route("/signup")
+@app.route("/signup", method=['post'])
 def signup():
     """
     Users may sign up and create their account for SharpBoards.
     :return: Opens new page, and creates SQL entry.
     """
+    signup_username = request.form['username']
+    signup_password = request.form['password']
+    signup_confirm_password = request.form['confirm_password']
+
     return render_template("signup.html")
 
 @app.route("/login")

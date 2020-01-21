@@ -31,11 +31,11 @@ def get_cards_for_board(board_id):
     return matching_cards
 
 
-def register_user(cursor, username, hashed_bytes):
+def register_user(cursor, username, password):
     cursor.execute("""
                     INSERT INTO users (username, password) VALUES 
-                    ( %(username)s, %(hashed_bytes)s);
-                    """, {'username':username, 'password':hashed_bytes})
+                    ( %(username)s, %(password)s);
+                    """, {'username': username, 'password': password})
     return
 
 
