@@ -16,16 +16,25 @@ export let dom = {
         // it adds necessary event listeners also
 
         let table = document.querySelector("#boards");
-
         for (let board of boards){
             table.insertAdjacentHTML("beforeend",
-                `
-            <div class="board-container" data-board-id="${board.id}">
-                <div class="board-title">${board.title}</div>
-                <div class="board-content"></div>
+                `<section class="board" data-board-id="${board.id}">
+            <div class="board-header">
+                <span class="board-title">${board.title}</span>
+                <button class="board-add">Add Card</button>
+                <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
             </div>
-            `
-            )
+            <div class="board-columns">
+                <div class="board-column">
+                    <div class="board-column-title">New</div>
+                    <div class="board-column-content"></div>
+                </div>
+            </div>
+            </section>`
+
+
+            );
+            dom.loadCards(board.id)
 
         }
         /*let boardList = '';
@@ -48,9 +57,21 @@ export let dom = {
          */
     },
     loadCards: function (boardId) {
+        dataHandler.getCardsByBoardId(boardId, function(cards){
+            dom.showCards(cards, boardId)
+        })
         // retrieves cards and makes showCards called
     },
-    showCards: function (cards) {
+    showCards: function (cards, boardId) {
+        let board = document.querySelector(`[data-board-id="${boardId}"]`).querySelector(".board-column-content");
+        for (let card of cards){
+            board.insertAdjacentHTML("beforeend",
+                `<div class="card" data-card-id="${card.id}">
+                    <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                    <div class="card-title">${card.title}</div>
+                </div>`
+            )
+        }
         // shows the cards of a board
         // it adds necessary event listeners also
     },
