@@ -31,13 +31,28 @@ def get_cards_for_board(board_id):
     return matching_cards
 
 
-def register_user():
+def register_user(cursor, username, hashed_bytes):
+    cursor.execute("""
+                    INSERT INTO users (username, password) VALUES 
+                    ( %(username)s, %(hashed_bytes)s);
+                    """, {'username':username, 'password':hashed_bytes})
     return
 
-def hash_password(password):
-    hashed_bytes = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+def get_hashed_password(cursor, username):
+    cursor.execute("""
+                    SELECT password FROM users
+                    WHERE username = %(username)s;                    
+                    """, {'username':username})
+    hashed_pw = cursor.fetchone()
+    return hashed_pw
+
+
+def hash_password(raw_password):
+    hashed_bytes = bcrypt.hashpw(raw_password.encode('utf-8'), bcrypt.gensalt())
     return hashed_bytes.decode('utf-8')
 
-def verify_password(password, hashed_password):
+
+def verify_password(raw_password, hashed_password):
     hashed_bytes_password = hashed_password.encode('utf-8')
-    return bcrypt.checkpw(password.encode('utf-8'), hashed_bytes_password)
+    return bcrypt.checkpw(raw_password.encode('utf-8'), hashed_bytes_password)
