@@ -41,5 +41,22 @@ def main():
         app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon/favicon.ico'))
 
 
+@app.route("/signup")
+def signup():
+    """
+    Users may sign up and create their account for SharpBoards.
+    :return: Opens new page, and creates SQL entry.
+    """
+    return render_template("signup.html")
+
+@app.route("/login")
+def login():
+    """
+    Already registered users may log in with their username and password on a new page.
+    :return: Opens a new page and forwards the user to mainpage afterwards.
+    """
+    return render_template("login.html")
+
+
 if __name__ == '__main__':
     main()

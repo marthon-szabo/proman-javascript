@@ -1,4 +1,5 @@
 import persistence
+import bcrypt
 
 
 def get_card_status(status_id):
@@ -28,3 +29,15 @@ def get_cards_for_board(board_id):
             card['status_id'] = get_card_status(card['status_id'])  # Set textual status for the card
             matching_cards.append(card)
     return matching_cards
+
+
+def register_user():
+    return
+
+def hash_password(password):
+    hashed_bytes = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
+
+def verify_password(password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(password.encode('utf-8'), hashed_bytes_password)
