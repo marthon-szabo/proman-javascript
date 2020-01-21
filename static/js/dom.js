@@ -20,7 +20,7 @@ export let dom = {
         for (let board of boards){
             table.insertAdjacentHTML("beforeend",
                 `
-            <div class="board-container">
+            <div class="board-container" data-board-id="${board.id}">
                 <div class="board-title">${board.title}</div>
                 <div class="board-content"></div>
             </div>
