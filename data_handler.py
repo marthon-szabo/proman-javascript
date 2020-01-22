@@ -1,3 +1,4 @@
+import connection
 import persistence
 import bcrypt
 
@@ -20,6 +21,7 @@ def get_boards():
     return persistence.get_boards(force=True)
 
 
+@connection.connection_handler
 def get_cards_for_board(board_id):
     persistence.clear_cache()
     all_cards = persistence.get_cards()
@@ -31,6 +33,7 @@ def get_cards_for_board(board_id):
     return matching_cards
 
 
+@connection.connection_handler
 def confirm_password(password, password_confirmation):
     if password == password_confirmation:
         passwords_matching = True
@@ -39,6 +42,7 @@ def confirm_password(password, password_confirmation):
     return passwords_matching
 
 
+@connection.connection_handler
 def register_user(cursor, username, password):
     cursor.execute("""
                     INSERT INTO users (username, password) VALUES 
@@ -46,6 +50,7 @@ def register_user(cursor, username, password):
                     """, {'username': username, 'password': password})
 
 
+@connection.connection_handler
 def get_hashed_password(cursor, username):
     cursor.execute("""
                     SELECT password FROM users
@@ -55,11 +60,13 @@ def get_hashed_password(cursor, username):
     return hashed_pw
 
 
+@connection.connection_handler
 def hash_password(raw_password):
     hashed_bytes = bcrypt.hashpw(raw_password.encode('utf-8'), bcrypt.gensalt())
     return hashed_bytes.decode('utf-8')
 
 
+@connection.connection_handler
 def verify_password(raw_password, hashed_password):
     hashed_bytes_password = hashed_password.encode('utf-8')
     return bcrypt.checkpw(raw_password.encode('utf-8'), hashed_bytes_password)
