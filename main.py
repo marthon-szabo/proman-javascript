@@ -59,6 +59,8 @@ def signup():
         else:
             return redirect('/')
 
+    return render_template("signup.html")
+
 
 @app.route("/login")
 def login():
