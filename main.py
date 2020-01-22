@@ -1,17 +1,20 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, jsonify
 from util import json_response
-
 import data_handler
-
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
     """
     This is a one-pager which shows all the boards and cards
     """
     return render_template('index.html')
+
+
+@app.route("/delete", methods=["GET", "POST"])
+def delete_item():
+    pass
 
 
 @app.route("/get-boards")
@@ -20,6 +23,7 @@ def get_boards():
     """
     All the boards
     """
+
     return data_handler.get_boards()
 
 

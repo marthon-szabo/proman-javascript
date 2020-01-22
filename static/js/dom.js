@@ -41,10 +41,21 @@ export let dom = {
     // here comes more features
     deleteElement: function (element, childDataset, parentDataset) {
         let parentElement = element.parentNode;
+        if (parentElement.dataset[parentDataset] != "0" && element.dataset[childDataset] != "0") {
+            switch (parentElement.dataset[parentDataset] === element.dataset[childDataset]) {
+                case true:
+                    parentElement.innerHTML = "";
+                    parentElement.dataset[parentDataset] = "0";
+                    element.dataset[childDataset] = "0";
+                    const parentAndChild = [JSON.stringify(element.dataset), JSON.stringify(parentElement.dataset)]
+                    console.log(parentAndChild)
 
-        switch (parentElement.dataset[parentDataset] === element.dataset[childDataset]) {
-            case true:
-                parentElement.innerHTML = "";
+                    //json.stringify(parentElement);
+                    //json.stringify(element);
+
+
+            }
+
         }
 
     },
