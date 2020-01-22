@@ -33,7 +33,6 @@ def get_cards_for_board(board_id):
     return matching_cards
 
 
-@connection.connection_handler
 def confirm_password(password, password_confirmation):
     if password == password_confirmation:
         passwords_matching = True
@@ -48,6 +47,21 @@ def register_user(cursor, username, password):
                     INSERT INTO users (username, password) VALUES 
                     ( %(username)s, %(password)s);
                     """, {'username': username, 'password': password})
+
+
+@connection.connection_handler
+def is_user_already_registered(cursor, username):
+    cursor.execute("""
+                    SELECT id FROM users WHERE username = %(username)s
+                    """, {'username': username})
+    registered_user_id = cursor.fetchone()
+    if registered_user_id != 0:
+        return registered_user_id
+    """
+    else:
+        registered_user_id = 0
+        return registered_user_id
+    """
 
 
 @connection.connection_handler
