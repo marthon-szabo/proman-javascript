@@ -24,53 +24,55 @@ export let dom = {
                 <button class="board-add">Add Card</button>
                 <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
             </div>
-            <div class="board-columns">
-                <div class="board-column">
-                    <div class="board-column-title">New</div>
-                    <div class="board-column-content"></div>
-                </div>
+            <div class="board-columns">                    
             </div>
             </section>`
 
 
             );
-            dom.loadCards(board.id)
+            dom.loadColumns(board.id, function() {
+                dom.loadCards(board.id);
+            });
 
         }
-        /*let boardList = '';
-
-        for(let board of boards){
-            boardList += `
-                <li>${board.title}</li>
-            `;
+    },
+    loadColumns: function(boardId, callback){
+        dataHandler.getStatuses(boardId, function(columns){
+            dom.showColumns(columns, boardId);
+            callback();
+        })
+    },
+    showColumns: function(columns, boardId){
+        let columnPlace = document.querySelector(`[data-board-id="${boardId}"]`).querySelector(".board-columns");
+        for (let column of columns){
+            if (column.board_id === boardId){
+                columnPlace.insertAdjacentHTML("beforeend",
+                `<div class="board-column" data-column-id="${column.id}">
+                    <div class="board-column-title">${column.title}</div>
+                    <div class="board-column-content"></div>
+                </div>`)
+            }
         }
-
-        const outerHtml = `
-            <ul class="board-container">
-                ${boardList}
-            </ul>
-        `;
-
-        let boardsContainer = document.querySelector('#boards');
-        boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
-
-         */
     },
     loadCards: function (boardId) {
         dataHandler.getCardsByBoardId(boardId, function(cards){
-            dom.showCards(cards, boardId)
+            dom.showCards(cards)
         })
         // retrieves cards and makes showCards called
     },
-    showCards: function (cards, boardId) {
-        let board = document.querySelector(`[data-board-id="${boardId}"]`).querySelector(".board-column-content");
+    showCards: function (cards) {
+        console.log(cards);
         for (let card of cards){
-            board.insertAdjacentHTML("beforeend",
+            let insertHere = document.querySelector(`[data-column-id="${card.col_id}"]`).querySelector(".board-column-content");
+            //if (card.col_id === boardColumn.dataset.columnId){
+                insertHere.insertAdjacentHTML("beforeend",
                 `<div class="card" data-card-id="${card.id}">
                     <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="card-title">${card.title}</div>
-                </div>`
-            )
+                    <div class="card-content">${card.text === null ? "" : card.text}</div>
+                    </div>`
+                )
+           // }
         }
         // shows the cards of a board
         // it adds necessary event listeners also
