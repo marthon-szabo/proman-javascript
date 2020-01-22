@@ -91,7 +91,6 @@ section.board{
 }
 
 .board-columns{
-    display: flex;
     flex-wrap: nowrap;
 }
 
@@ -157,4 +156,12 @@ section.board{
 
 .card-title{
     padding-right: 16px;
+}
+
+.flex {
+    display: flex;
+}
+
+.hidden {
+    display: none;
 }

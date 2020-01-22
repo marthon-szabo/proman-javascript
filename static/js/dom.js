@@ -24,7 +24,7 @@ export let dom = {
                 <button class="board-add">Add Card</button>
                 <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
             </div>
-            <div class="board-columns">                    
+            <div class="board-columns flex">                    
             </div>
             </section>`
 
@@ -34,6 +34,15 @@ export let dom = {
                 dom.loadCards(board.id);
             });
 
+        }
+        let boardSelector = document.querySelectorAll(".board-toggle");
+        for (let boardheader of boardSelector) {
+            boardheader.addEventListener("click", function(event){
+                event.currentTarget.firstChild.classList.toggle("fa-chevron-up");
+                console.log(event.target.parentElement.nextElementSibling);
+                event.currentTarget.parentElement.nextElementSibling.classList.toggle("flex");
+                event.currentTarget.parentElement.nextElementSibling.classList.toggle("hidden");
+            })
         }
     },
     loadColumns: function(boardId, callback){
