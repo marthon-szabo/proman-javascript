@@ -39,3 +39,16 @@ def get_statuses_aka_columns(cursor, board_id):
         WHERE board_id = %(board_id)s
     """, {"board_id": board_id})
     return cursor.fetchall()
+
+@connection.connection_handler
+def write_item(cursor, type, title, foreign_id, text):
+    if type == "card":
+        try:
+            cursor.execute("""
+                INSERT INTO cards(title, text, col_id)
+                VALUES (%(title)s, %(text)s, %(col_id)s)
+            """, {"title": title, "text": text, "col_id": foreign_id}
+            )
+            return True
+        except:
+            return False

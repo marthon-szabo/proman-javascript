@@ -39,9 +39,17 @@ export let dom = {
         for (let boardheader of boardSelector) {
             boardheader.addEventListener("click", function(event){
                 event.currentTarget.firstChild.classList.toggle("fa-chevron-up");
-                console.log(event.target.parentElement.nextElementSibling);
                 event.currentTarget.parentElement.nextElementSibling.classList.toggle("flex");
                 event.currentTarget.parentElement.nextElementSibling.classList.toggle("hidden");
+            })
+        }
+        let buttonSelector = document.querySelectorAll(".board-add");
+        for (let button of buttonSelector) {
+            button.addEventListener("click", function(event){
+                let actualBoard = event.target.parentElement.parentElement;
+                let actualColId = actualBoard.querySelector(".board-column").dataset.columnId; // this is the 1st col. "New"
+                event.stopPropagation();
+                dom.temporaryCard(actualColId);
             })
         }
     },
@@ -86,5 +94,33 @@ export let dom = {
         // shows the cards of a board
         // it adds necessary event listeners also
     },
+    temporaryCard: function(columnId){
+        document.querySelector(`[data-column-id="${columnId}"]`).firstElementChild.insertAdjacentHTML(
+            "afterend",
+            `<div class="card-composer" id="temporary" data-column-id="${columnId}">
+                    <textarea>Enter the card's title here</textarea>                  
+                    <button>Save</button>
+                    </div>`
+        );
+        eventListeners.forTemporaryCard()
+    },
+
     // here comes more features
+};
+
+let eventListeners = {
+    forTemporaryCard: function(){
+        let tempObj = document.querySelector("#temporary");
+        document.addEventListener("click", function(event){
+            if (tempObj !== event.target.parentElement){
+                tempObj.remove();
+                document.removeEventListener("click", arguments.callee)
+            } else if (event.target === tempObj.querySelector("button")) {
+                let title = tempObj.querySelector("textarea").value;
+                let columnId = tempObj.dataset.columnId;
+                dataHandler.createNewCard(title, columnId, function(response){console.log(response)} )
+            }
+        })
+    },
+
 };

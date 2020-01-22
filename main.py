@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from util import json_response
 
 import data_handler
@@ -37,6 +37,22 @@ def get_cards_for_board(board_id: int):
 @json_response
 def get_statuses(board_id: int):
     return data_handler.get_statuses_aka_columns(board_id)
+
+
+@app.route("/create-new", methods=["POST", "GET"])
+@json_response
+def receive_data_to_database():
+    if request.method == "POST":
+        item = request.get_json()
+        try:
+            text = item["text"]
+        except:
+            text = None
+        success = data_handler.write_item(item["type"], item["title"], item["foreign_id"], text)
+        return "data received" if success else "writing failed"
+
+    print("this is not supposed to run, GET")
+    return None
 
 
 def main():

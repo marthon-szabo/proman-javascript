@@ -22,9 +22,8 @@ export let dataHandler = {
 
         fetch(url,  {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data),
-            credentials: 'same-origin'
+            headers: {'Content-Type': 'application/json'}, // multipart/form-data
+            body: JSON.stringify(data)
         })
         .then(response => response.json())
         .then(json_response => callback(json_response));
@@ -67,8 +66,16 @@ export let dataHandler = {
     createNewBoard: function (boardTitle, callback) {
         // creates new board, saves it and calls the callback function with its data
     },
-    createNewCard: function (cardTitle, boardId, statusId, callback) {
+    createNewCard: function (cardTitle, statusId, callback) { //boardId not necessary
         // creates new card, saves it and calls the callback function with its data
+        let cardData = {
+            "type": "card",
+            "title": cardTitle,
+            "foreign_id": statusId
+        };
+        this._api_post("/create-new", cardData, (response) => {
+            callback(response)
+        })
     }
     // here comes more features
 };
