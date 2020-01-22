@@ -39,5 +39,19 @@ export let dom = {
         // it adds necessary event listeners also
     },
     // here comes more features
+    deleteElement: function (element, childDataset, parentDataset) {
+        let parentElement = element.parentNode;
+
+        switch (parentElement.dataset[parentDataset] === element.dataset[childDataset]) {
+            case true:
+                parentElement.innerHTML = "";
+        }
+
+    },
+
+    selectToDelete: function (attribute, childDataset, parentDataset) {
+        let element = document.querySelector(`${attribute}`);
+        element.addEventListener("click", function () { dom.deleteElement(element, childDataset, parentDataset)} );
+    },
 };
-dom.loadBoards();
+
