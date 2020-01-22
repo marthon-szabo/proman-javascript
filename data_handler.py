@@ -31,12 +31,19 @@ def get_cards_for_board(board_id):
     return matching_cards
 
 
+def confirm_password(password, password_confirmation):
+    if password == password_confirmation:
+        passwords_matching = True
+    else:
+        passwords_matching = False
+    return passwords_matching
+
+
 def register_user(cursor, username, password):
     cursor.execute("""
                     INSERT INTO users (username, password) VALUES 
                     ( %(username)s, %(password)s);
                     """, {'username': username, 'password': password})
-    return
 
 
 def get_hashed_password(cursor, username):

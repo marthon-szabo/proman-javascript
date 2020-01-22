@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, redirect
 from util import json_response
 
 import data_handler
@@ -47,17 +47,24 @@ def signup():
     Users may sign up and create their account for SharpBoards.
     :return: Opens new page, and creates SQL entry.
     """
-    #signup_username = request.form['username']
-    #signup_password = request.form['password']
-    #signup_confirm_password = request.form['confirm_password']
-    return render_template("signup.html")
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        password_confirmation = request.form['confirm_password']
+        passwords_matching = data_handler.confirm_password(password, password_confirmation)
+        if passwords_matching:
+            data_handler.register_user(username, password)
+            return render_template("signup.html", username=username, password=password,
+                                   password_confirmation=password_confirmation)
+        else:
+            return redirect('/')
 
 
 @app.route("/login")
 def login():
     """
     Already registered users may log in with their username and password on a new page.
-    :return: Opens a new page and forwards the user to mainpage afterwards.
+    :return: Opens a new page and forwards the user to main page afterwards.
     """
     return render_template("login.html")
 

@@ -5,16 +5,15 @@
     <title>Registration</title>
 </head>
 <body>
-<a href="../">back to SharpBoards</a>
+    <a href="../">back to SharpBoards</a>
     <div class="signup-window">
-        <form action="/signup" method="post">
+        <form action="{{ url_for('signup') }}" method="post">
             <input type="text" class="text-signup" name="username" id="username" maxlength="255" placeholder="Username" required><br>
             <input type="password" class="text-signup" name="password" maxlength="255" placeholder="Password" required><br>
             <input type="password" class="text-signup" name="confirm_password" maxlength="255" placeholder="Confirm password" required><br>
             <button type="submit" name="register" class="button-signup">Sign up</button><br>
             <a class="text-for-already-signed-up" href="/login">Already signed up?</a>
         </form>
-
     </div>
 </body>
 </html>
