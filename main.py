@@ -41,16 +41,15 @@ def main():
         app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon/favicon.ico'))
 
 
-@app.route("/signup", method=['post'])
+@app.route("/signup", methods=['GET', 'POST'])
 def signup():
     """
     Users may sign up and create their account for SharpBoards.
     :return: Opens new page, and creates SQL entry.
     """
-    signup_username = request.form['username']
-    signup_password = request.form['password']
-    signup_confirm_password = request.form['confirm_password']
-    print(data_handler.verify_password("abc", "abc"))
+    #signup_username = request.form['username']
+    #signup_password = request.form['password']
+    #signup_confirm_password = request.form['confirm_password']
     return render_template("signup.html")
 
 
