@@ -52,11 +52,7 @@ export let dom = {
         let columnPlace = document.querySelector(`[data-board-id="${boardId}"]`).querySelector(".board-columns");
         for (let column of columns){
             if (column.board_id === boardId){
-                columnPlace.insertAdjacentHTML("beforeend",
-                `<div class="board-column" data-column-id="${column.id}">
-                    <div class="board-column-title">${column.title}</div>
-                    <div class="board-column-content"></div>
-                </div>`)
+                columnPlace.insertAdjacentHTML("beforeend", templates.column(column.id, column.title))
             }
         }
     },
@@ -143,6 +139,12 @@ let templates = {
         <div class="board-columns flex">                    
         </div>
         </section>`
+    },
+    column: (columnId, columnTitle) => {
+        return `<div class="board-column" data-column-id="${columnId}">
+                    <div class="board-column-title">${columnTitle}</div>
+                    <div class="board-column-content"></div>
+                </div>`
     }
 
 };
