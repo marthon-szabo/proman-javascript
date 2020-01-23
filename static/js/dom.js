@@ -3,6 +3,7 @@ import { dataHandler } from "./data_handler.js";
 
 export let dom = {
     init: function () {
+        eventListeners.buttonCreateBoard();
         // This function should run once, when the page is loaded.
     },
     loadBoards: function () {
@@ -81,15 +82,7 @@ export let dom = {
         console.log(cards);
         for (let card of cards){
             let insertHere = document.querySelector(`[data-column-id="${card.col_id}"]`).querySelector(".board-column-content");
-            //if (card.col_id === boardColumn.dataset.columnId){
-                insertHere.insertAdjacentHTML("beforeend",
-                `<div class="card" data-card-id="${card.id}">
-                    <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title">${card.title}</div>
-                    <div class="card-content">${card.text === null ? "" : card.text}</div>
-                    </div>`
-                )
-           // }
+            insertHere.insertAdjacentHTML("beforeend", templates.card(card.id, card.title, card.text))
         }
         // shows the cards of a board
         // it adds necessary event listeners also
@@ -107,12 +100,7 @@ export let dom = {
     },
     insertCard: function(columnId, cardId, title, text){
         document.querySelector(`[data-column-id="${columnId}"]`).firstElementChild.insertAdjacentHTML(
-            "afterend",
-            `<div class="card" data-card-id="${cardId}">
-                    <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title">${title}</div>
-                    <div class="card-content">${text=== null ? "" : text}</div>
-                    </div>`
+            "afterend", templates.card(cardId, title, text)
         )
     },
     // here comes more features
@@ -141,5 +129,18 @@ let eventListeners = {
             document.removeEventListener("click", arguments.callee)
         })
     },
+    buttonCreateBoard: function(){
+        document.querySelector("#create-board").addEventListener("click", function(){
+            console.log("createboardbutton clicked")
+        })
+    }
 
+};
+
+let templates = {
+    card: (cardId, title, text) => {return `<div class="card" data-card-id="${cardId}">
+                    <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                    <div class="card-title">${title}</div>
+                    <div class="card-content">${text === null ? "" : text}</div>
+                    </div>`}
 };
