@@ -41,7 +41,7 @@ def get_statuses_aka_columns(cursor, board_id):
     return cursor.fetchall()
 
 @connection.connection_handler
-def write_item(cursor, type, title, foreign_id=None, text=None):
+def write_item(cursor, type, title, foreign_id=None, text=None, status=None, user_id=None):
     if type == "card":
         try:
             cursor.execute("""
@@ -50,6 +50,17 @@ def write_item(cursor, type, title, foreign_id=None, text=None):
                 RETURNING id;
             """, {"title": title, "text": text, "col_id": foreign_id}
             )
+            return cursor.fetchone()
+        except:
+            return False
+    elif type == "board":
+        try:
+            cursor.execute("""
+                INSERT INTO boards (title, status, user_id)
+                VALUES (%(title)s, %(status)s, %(user_id)s)
+                RETURNING id;
+            """, {"title": title, "status": status, "user_id": user_id}
+           )
             return cursor.fetchone()
         except:
             return False

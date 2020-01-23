@@ -93,7 +93,6 @@ export let dom = {
 let eventListeners = {
     buttonCreateBoard: function() {
         document.querySelector("#create-board").addEventListener("click", function (event) {
-            console.log("createboardbutton clicked");
             document.querySelector("#boards").insertAdjacentHTML("afterbegin",
                 `<div id="temporary" name="board">
                     <label for="inp-new-board">Enter the board's title:</label>
