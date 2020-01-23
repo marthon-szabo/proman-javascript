@@ -18,19 +18,7 @@ export let dom = {
 
         let table = document.querySelector("#boards");
         for (let board of boards){
-            table.insertAdjacentHTML("beforeend",
-                `<section class="board" data-board-id="${board.id}">
-            <div class="board-header">
-                <span class="board-title">${board.title}</span>
-                <button class="board-add">Add Card</button>
-                <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
-            </div>
-            <div class="board-columns flex">                    
-            </div>
-            </section>`
-
-
-            );
+            table.insertAdjacentHTML("beforeend", templates.board(board.id, board.title));
             dom.loadColumns(board.id, function() {
                 dom.loadCards(board.id);
             });
@@ -138,9 +126,23 @@ let eventListeners = {
 };
 
 let templates = {
-    card: (cardId, title, text) => {return `<div class="card" data-card-id="${cardId}">
-                    <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title">${title}</div>
-                    <div class="card-content">${text === null ? "" : text}</div>
-                    </div>`}
+    card: (cardId, title, text) => {
+        return `<div class="card" data-card-id="${cardId}">
+        <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+        <div class="card-title">${title}</div>
+        <div class="card-content">${text === null ? "" : text}</div>
+        </div>`
+    },
+    board: (boardId, boardTitle) => {
+        return `<section class="board" data-board-id="${boardId}">
+        <div class="board-header">
+            <span class="board-title">${boardTitle}</span>
+            <button class="board-add">Add Card</button>
+            <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
+        </div>
+        <div class="board-columns flex">                    
+        </div>
+        </section>`
+    }
+
 };
