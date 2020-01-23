@@ -80,7 +80,7 @@ export let dom = {
                     <button>Save</button>
                     </div>`
         );
-        eventListeners.forTemporaryCard()
+        eventListeners.forTemporaryElement("card"); //forTemporaryCard()
     },
     insertCard: function(columnId, cardId, title, text){
         document.querySelector(`[data-column-id="${columnId}"]`).firstElementChild.insertAdjacentHTML(
@@ -91,33 +91,50 @@ export let dom = {
 };
 
 let eventListeners = {
-    forTemporaryCard: function(){
+    buttonCreateBoard: function() {
+        document.querySelector("#create-board").addEventListener("click", function (event) {
+            console.log("createboardbutton clicked");
+            document.querySelector("#boards").insertAdjacentHTML("afterbegin",
+                `<div id="temporary" name="board">
+                    <label for="inp-new-board">Enter the board's title:</label>
+                    <input id="inp-new-board" >
+                    <button>save</button>
+                    </div>`);
+            event.stopPropagation();
+            eventListeners.forTemporaryElement("board");
+        })
+    },
+    forTemporaryElement: function(elementType){
         let tempObj = document.querySelector("#temporary");
         document.addEventListener("click", function(event){
             if (tempObj !== event.target.parentElement){
                 tempObj.remove();
             } else if (event.target === tempObj.querySelector("button")) { // save button
-                let title = tempObj.querySelector(`[name="composer-title"]`).value;
-                let text = tempObj.querySelector(`[name="composer-text"]`).value;
-                let columnId = tempObj.dataset.columnId;
-                dataHandler.createNewCard(title, text, columnId, function(response){ // the newly created ID comes back in the response
-                    if (response === "writing failed" ){
-                        alert("some error occurred. Data is not accepted.")
-                    } else {
-                       dom.insertCard(columnId, response, title, text)
-                    }
-
-                });
+                switch(elementType){
+                    case "card":
+                        let title = tempObj.querySelector(`[name="composer-title"]`).value;
+                        let text = tempObj.querySelector(`[name="composer-text"]`).value;
+                        let columnId = tempObj.dataset.columnId;
+                        dataHandler.createNewCard(title, text, columnId, function(response){ // the newly created ID comes back in the response
+                            if (response === "writing failed" ){
+                                alert("some error occurred. Data is not accepted.")
+                            } else {
+                               dom.insertCard(columnId, response, title, text)
+                            }
+                         });
+                        break;
+                    case "board":
+                        let boardTitle = tempObj.querySelector("input").value;
+                        dataHandler.createNewBoard(boardTitle, function(response){
+                            document.querySelector("#boards").insertAdjacentHTML("afterbegin", templates.board(response, boardTitle))
+                        });
+                        break;
+                }
                 tempObj.remove()
             }
             document.removeEventListener("click", arguments.callee)
         })
     },
-    buttonCreateBoard: function(){
-        document.querySelector("#create-board").addEventListener("click", function(){
-            console.log("createboardbutton clicked")
-        })
-    }
 
 };
 
