@@ -72,7 +72,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         db_password = data_handler.get_password_from_db(username)
-        if password == db_password:
+        if password == db_password['password']:
             return redirect('/')
     return render_template("login.html")
 

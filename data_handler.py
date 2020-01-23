@@ -89,7 +89,8 @@ def verify_password(raw_password, hashed_password):
 @connection.connection_handler
 def get_password_from_db(cursor, username):
     cursor.execute("""
-                    SELECT password FROM users WHERE username = %(username)s;
+                    SELECT password FROM users
+                    WHERE username = %(username)s;
                     """, {"username": username})
     password_from_db = cursor.fetchone()
     return password_from_db

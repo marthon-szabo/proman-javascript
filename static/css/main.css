@@ -38,6 +38,10 @@ div {
 .signup-signin-text-space {
     position: center;
     z-index: 3;
+    display: block;
+    max-height: 999px;
+    height: auto;
+    opacity: 1;
 }
 
 ::selection {
@@ -47,3 +51,4 @@ div {
 h1, .board-title, .board-column-title{
     font-weight: 100;
 }
+
