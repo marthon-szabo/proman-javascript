@@ -47,7 +47,6 @@ def signup():
     Users may sign up and create their account for SharpBoards.
     :return: Opens new page, and creates SQL entry.
     """
-
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -63,13 +62,18 @@ def signup():
     return render_template("signup.html")
 
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
     """
     Already registered users may log in with their username and password on a new page.
     :return: Opens a new page and forwards the user to main page afterwards.
     """
-
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        db_password = data_handler.get_password_from_db(username)
+        if password == db_password:
+            return redirect('/')
     return render_template("login.html")
 
 

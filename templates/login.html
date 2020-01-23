@@ -7,9 +7,11 @@
 <body>
 <a href="../">back to SharpBoards</a>
     <div class="signup-window">
-        <input type="text" class="text_signup" id="username" maxlength="255" placeholder="Username"><br>
-        <input type="password" class="text_signup" id="password" maxlength="255" placeholder="Password"><br>
-        <button type="submit" class="button-signup" name="login">Log in</button>
+        <form action="{{ url_for('login') }}" method="post">
+            <input type="text" class="text_signup" name="username" maxlength="255" placeholder="Username"><br>
+            <input type="password" class="text_signup" name="password" maxlength="255" placeholder="Password"><br>
+            <button type="submit" class="button-signup" name="login">Log in</button>
+        </form>
     </div>
 </body>
 </html>

@@ -69,7 +69,7 @@ def get_hashed_password(cursor, username):
     cursor.execute("""
                     SELECT password FROM users
                     WHERE username = %(username)s;                    
-                    """, {'username':username})
+                    """, {'username': username})
     hashed_pw = cursor.fetchone()
     return hashed_pw
 
@@ -84,3 +84,12 @@ def hash_password(raw_password):
 def verify_password(raw_password, hashed_password):
     hashed_bytes_password = hashed_password.encode('utf-8')
     return bcrypt.checkpw(raw_password.encode('utf-8'), hashed_bytes_password)
+
+
+@connection.connection_handler
+def get_password_from_db(cursor, username):
+    cursor.execute("""
+                    SELECT password FROM users WHERE username = %(username)s;
+                    """, {"username": username})
+    password_from_db = cursor.fetchone()
+    return password_from_db
