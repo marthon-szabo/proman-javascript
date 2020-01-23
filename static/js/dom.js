@@ -25,6 +25,7 @@ export let dom = {
             eventListeners.toggleBoard(board.id);
             eventListeners.addCardBtn(board.id);
             eventListeners.addColumnBtn(board.id);
+            eventListeners.addDelBtn("board", board.id);
         }
     },
     loadColumns: function(boardId, callback){
@@ -95,6 +96,13 @@ export let dom = {
 
         }
 
+    },
+    deleteElementSecond: function (containerElement){
+        fetch('/delete-element', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(containerElement.dataset)
+                    })
     },
 
     selectToDelete: function (attribute, childDataset, parentDataset) {
@@ -197,6 +205,29 @@ let eventListeners = {
             eventListeners.forTemporaryElement("column");
         });
     },
+    addDelBtn: function(elementType, elementId){
+        let element;
+        switch (elementType){
+            case "card":
+                element = document.querySelector(`[data-card-id="${elementId}"]`);
+                break;
+            case "column":
+                element = document.querySelector(`[data-column-id="${elementId}"]`);
+                break;
+            case "board":
+                element = document.querySelector(`[data-board-id="${elementId}"]`);
+        }
+        element.addEventListener("click", function(event){
+            if (event.target.matches(".delete-button")){
+                dom.deleteElementSecond(this);
+                this.remove();
+            }
+            if (event.target.matches(".fa-trash-alt")){
+                dom.deleteElementSecond(event.target.parentElement.parentElement);
+                event.target.parentElement.parentElement.remove()
+            }
+        })
+    }
 
 };
 
@@ -214,6 +245,7 @@ let templates = {
             <span class="board-title">${boardTitle}</span>
             <button class="board-add">Add Card</button>
             <button class="board-add-col">New Column</button>
+            <button class="delete-button">Del</button>
             <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
         </div>
         <div class="board-columns flex">                    
@@ -222,6 +254,7 @@ let templates = {
     },
     column: (columnId, columnTitle) => {
         return `<div class="board-column" data-column-id="${columnId}">
+                    <div class="column-remove"><i class="fas fa-trash-alt"></i></div>
                     <div class="board-column-title">${columnTitle}</div>
                     <div class="board-column-content"></div>
                 </div>`

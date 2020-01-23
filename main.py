@@ -22,6 +22,7 @@ def check_element(data):
 @app.route("/delete-element", methods=["GET", "POST"])
 def delete_item():
     data = request.get_json()
+    print(data)
     check_element(data)
     # TODO: Mergeing: dev/create
 

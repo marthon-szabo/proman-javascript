@@ -92,12 +92,13 @@ section.board{
 }
 
 .board-columns{
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
 }
 
 .board-column{
     padding: 10px;
     flex: 1;
+    min-width: 280px;
 }
 
 .board-column-content{
@@ -215,4 +216,8 @@ input[type=text], [type=password], select {
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
+}
+
+.column-remove {
+    float: right;
 }
