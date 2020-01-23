@@ -67,8 +67,8 @@ export let dom = {
         eventListeners.forTemporaryElement("card"); //forTemporaryCard()
     },
     insertCard: function(columnId, cardId, title, text){
-        document.querySelector(`[data-column-id="${columnId}"]`).firstElementChild.insertAdjacentHTML(
-            "afterend", templates.card(cardId, title, text)
+        document.querySelector(`[data-column-id="${columnId}"] > .board-column-content`).insertAdjacentHTML(
+            "beforeend", templates.card(cardId, title, text)
         )
     },
     // here comes more features
