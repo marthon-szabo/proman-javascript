@@ -22,24 +22,8 @@ export let dom = {
             dom.loadColumns(board.id, function() {
                 dom.loadCards(board.id);
             });
-
-        }
-        let boardSelector = document.querySelectorAll(".board-toggle");
-        for (let boardheader of boardSelector) {
-            boardheader.addEventListener("click", function(event){
-                event.currentTarget.firstChild.classList.toggle("fa-chevron-up");
-                event.currentTarget.parentElement.nextElementSibling.classList.toggle("flex");
-                event.currentTarget.parentElement.nextElementSibling.classList.toggle("hidden");
-            })
-        }
-        let buttonSelector = document.querySelectorAll(".board-add");
-        for (let button of buttonSelector) {
-            button.addEventListener("click", function(event){
-                let actualBoard = event.target.parentElement.parentElement;
-                let actualColId = actualBoard.querySelector(".board-column").dataset.columnId; // this is the 1st col. "New"
-                event.stopPropagation();
-                dom.temporaryCard(actualColId);
-            })
+            eventListeners.toggleBoard(board.id);
+            eventListeners.addCardBtn(board.id);
         }
     },
     loadColumns: function(boardId, callback){
@@ -125,7 +109,11 @@ let eventListeners = {
                     case "board":
                         let boardTitle = tempObj.querySelector("input").value;
                         dataHandler.createNewBoard(boardTitle, function(response){
-                            document.querySelector("#boards").insertAdjacentHTML("afterbegin", templates.board(response, boardTitle))
+                            document.querySelector("#boards").insertAdjacentHTML("afterbegin",
+                                templates.board(response, boardTitle));
+                            dom.loadColumns(response);
+                            eventListeners.addCardBtn(response);
+                            eventListeners.toggleBoard(response);
                         });
                         break;
                 }
@@ -134,6 +122,28 @@ let eventListeners = {
             document.removeEventListener("click", arguments.callee)
         })
     },
+    toggleBoard: function(element_id){
+        //let boardSelector = document.querySelectorAll(".board-toggle");
+        //for (let boardheader of boardSelector) {
+        let element = document.querySelector(`[data-board-id="${element_id}"]`);
+        let boardheader = element.querySelector(".board-toggle");
+        boardheader.addEventListener("click", function(event){
+            event.currentTarget.firstChild.classList.toggle("fa-chevron-up");
+            event.currentTarget.parentElement.nextElementSibling.classList.toggle("flex");
+            event.currentTarget.parentElement.nextElementSibling.classList.toggle("hidden");
+        })
+
+    },
+    addCardBtn: function(element_id){
+        let element = document.querySelector(`[data-board-id="${element_id}"]`);
+        let button = element.querySelector(".board-add");
+        button.addEventListener("click", function(event){
+            let actualBoard = event.target.parentElement.parentElement;
+            let actualColId = actualBoard.querySelector(".board-column").dataset.columnId; // this is the 1st col. "New"
+            event.stopPropagation();
+            dom.temporaryCard(actualColId);
+        })
+    }
 
 };
 

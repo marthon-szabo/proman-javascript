@@ -53,6 +53,7 @@ def write_item(cursor, type, title, foreign_id=None, text=None, status=None, use
             return cursor.fetchone()
         except:
             return False
+
     elif type == "board":
         try:
             cursor.execute("""
@@ -61,6 +62,14 @@ def write_item(cursor, type, title, foreign_id=None, text=None, status=None, use
                 RETURNING id;
             """, {"title": title, "status": status, "user_id": user_id}
            )
-            return cursor.fetchone()
+            board_id = cursor.fetchone()
+
+            for title in ["New", "In progress", "Testing", "Done"]:
+                cursor.execute("""
+                    INSERT INTO columns (title, board_id)
+                    VALUES (%(title)s, %(board_id)s)
+                """, {"title": title, "board_id": board_id["id"]})
+
+            return board_id
         except:
             return False
