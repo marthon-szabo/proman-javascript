@@ -66,11 +66,12 @@ export let dataHandler = {
     createNewBoard: function (boardTitle, callback) {
         // creates new board, saves it and calls the callback function with its data
     },
-    createNewCard: function (cardTitle, statusId, callback) { //boardId not necessary
+    createNewCard: function (cardTitle, cardText, statusId, callback) { //boardId not necessary
         // creates new card, saves it and calls the callback function with its data
         let cardData = {
             "type": "card",
             "title": cardTitle,
+            "text": cardText,
             "foreign_id": statusId
         };
         this._api_post("/create-new", cardData, (response) => {

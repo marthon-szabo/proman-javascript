@@ -98,7 +98,8 @@ export let dom = {
         document.querySelector(`[data-column-id="${columnId}"]`).firstElementChild.insertAdjacentHTML(
             "afterend",
             `<div class="card-composer" id="temporary" data-column-id="${columnId}">
-                    <textarea>Enter the card's title here</textarea>                  
+                    <textarea name="composer-title">Enter the card's title here</textarea>
+                    <textarea name="composer-text"></textarea>         
                     <button>Save</button>
                     </div>`
         );
@@ -123,14 +124,21 @@ let eventListeners = {
         document.addEventListener("click", function(event){
             if (tempObj !== event.target.parentElement){
                 tempObj.remove();
-                document.removeEventListener("click", arguments.callee)
             } else if (event.target === tempObj.querySelector("button")) { // save button
-                let title = tempObj.querySelector("textarea").value;
+                let title = tempObj.querySelector(`[name="composer-title"]`).value;
+                let text = tempObj.querySelector(`[name="composer-text"]`).value;
                 let columnId = tempObj.dataset.columnId;
-                dataHandler.createNewCard(title, columnId, function(response){ // the newly created ID comes back in the response
-                    dom.insertCard(columnId, response, title)
-                })
+                dataHandler.createNewCard(title, text, columnId, function(response){ // the newly created ID comes back in the response
+                    if (response === "writing failed" ){
+                        alert("some error occurred. Data is not accepted.")
+                    } else {
+                       dom.insertCard(columnId, response, title, text)
+                    }
+
+                });
+                tempObj.remove()
             }
+            document.removeEventListener("click", arguments.callee)
         })
     },
 
