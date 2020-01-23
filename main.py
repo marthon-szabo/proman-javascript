@@ -3,7 +3,6 @@ from psycopg2 import IntegrityError
 from util import json_response
 import data_handler
 
-
 app = Flask(__name__)
 
 
@@ -95,7 +94,7 @@ def login():
         db_password = data_handler.get_password_from_db(username)
         try:
             if password == db_password['password']:
-                return redirect('/')
+                return redirect('/')  # Add private login state here
         except TypeError:
             return render_template('login.html')
     return render_template("login.html")
