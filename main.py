@@ -44,11 +44,7 @@ def get_statuses(board_id: int):
 def receive_data_to_database():
     if request.method == "POST":
         item = request.get_json()
-        try:
-            text = item["text"]
-        except:
-            text = None
-        success = data_handler.write_item(item["type"], item["title"], item["foreign_id"], text)
+        success = data_handler.write_item(**item)
         return success["id"] if success else "writing failed"
 
     print("this is not supposed to run, GET")

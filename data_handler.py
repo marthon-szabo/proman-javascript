@@ -41,7 +41,7 @@ def get_statuses_aka_columns(cursor, board_id):
     return cursor.fetchall()
 
 @connection.connection_handler
-def write_item(cursor, type, title, foreign_id, text):
+def write_item(cursor, type, title, foreign_id=None, text=None):
     if type == "card":
         try:
             cursor.execute("""

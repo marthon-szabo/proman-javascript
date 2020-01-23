@@ -71,8 +71,8 @@ export let dataHandler = {
         let cardData = {
             "type": "card",
             "title": cardTitle,
-            "text": cardText,
-            "foreign_id": statusId
+            "foreign_id": statusId,
+            "text": cardText
         };
         this._api_post("/create-new", cardData, (response) => {
             callback(response)
