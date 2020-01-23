@@ -171,7 +171,6 @@ section.board{
     cursor: pointer;
 }
 
-
 .signup-window {
     position: relative;
     padding-top: 200px;
@@ -210,4 +209,10 @@ input[type=text], [type=password], select {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+}
+
+.card-composer {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 }

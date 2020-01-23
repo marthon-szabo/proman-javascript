@@ -6,7 +6,7 @@ import data_handler
 app = Flask(__name__)
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 def index():
     """
     This is a one-pager which shows all the boards and cards
@@ -32,7 +32,6 @@ def get_boards():
     """
     All the boards
     """
-
     return data_handler.get_boards()
 
 
@@ -50,6 +49,18 @@ def get_cards_for_board(board_id: int):
 @json_response
 def get_statuses(board_id: int):
     return data_handler.get_statuses_aka_columns(board_id)
+
+
+@app.route("/create-new", methods=["POST", "GET"])
+@json_response
+def receive_data_to_database():
+    if request.method == "POST":
+        item = request.get_json()
+        success = data_handler.write_item(**item)
+        return success["id"] if success else "writing failed"
+
+    print("this is not supposed to run, GET")
+    return None
 
 
 def main():
