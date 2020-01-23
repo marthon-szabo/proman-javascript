@@ -30,3 +30,32 @@ def get_cards_for_board(board_id):
             card['status_id'] = get_card_status(card['status_id'])  # Set textual status for the card
             matching_cards.append(card)
     return matching_cards
+
+
+
+@connection.connection_handler
+def delete_element(cursor, element, id):
+    if 'board' in element:
+        cursor.execute("""
+                        DELETE FROM boards
+                        WHERE id = %(id)s;
+                        """,
+                       {'id': id})
+    elif 'col' in element:
+        cursor.execute("""
+                        DELETE FROM columns
+                        WHERE id = %(id)s;
+                        """,
+                       {'id': id})
+
+    elif 'card' in element:
+        cursor.execute("""
+                                DELETE FROM cards
+                                WHERE id = %(id)s;
+                                """,
+                       {'id': id})
+
+
+
+
+

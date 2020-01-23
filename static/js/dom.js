@@ -45,10 +45,13 @@ export let dom = {
             switch (parentElement.dataset[parentDataset] === element.dataset[childDataset]) {
                 case true:
                     parentElement.innerHTML = "";
-                    parentElement.dataset[parentDataset] = "0";
-                    element.dataset[childDataset] = "0";
-                    const parentAndChild = [JSON.stringify(element.dataset), JSON.stringify(parentElement.dataset)]
-                    console.log(parentAndChild)
+                    fetch('/delete-element', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(parentElement.dataset)
+                    }).then((parentAndChild) => parentAndChild)
 
                     //json.stringify(parentElement);
                     //json.stringify(element);

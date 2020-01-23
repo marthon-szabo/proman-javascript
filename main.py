@@ -1,6 +1,8 @@
 from flask import Flask, render_template, url_for, request, jsonify
 from util import json_response
 import data_handler
+
+
 app = Flask(__name__)
 
 
@@ -12,9 +14,16 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/delete", methods=["GET", "POST"])
+def check_element(data):
+    for key, value in data.items():
+        data_handler.delete_element(str(key), int(value))
+
+
+@app.route("/delete-element", methods=["GET", "POST"])
 def delete_item():
-    pass
+    data = request.get_json()
+    check_element(data)
+    # TODO: Mergeing: dev/create
 
 
 @app.route("/get-boards")
