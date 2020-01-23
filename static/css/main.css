@@ -164,4 +164,7 @@ section.board{
 
 .hidden {
     display: none;
+
+.card-remove:hover {
+    cursor: pointer;
 }

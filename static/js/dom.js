@@ -86,5 +86,33 @@ export let dom = {
         // it adds necessary event listeners also
     },
     // here comes more features
+    deleteElement: function (element, childDataset, parentDataset) {
+        let parentElement = element.parentNode;
+        if (parentElement.dataset[parentDataset] != "0" && element.dataset[childDataset] != "0") {
+            switch (parentElement.dataset[parentDataset] === element.dataset[childDataset]) {
+                case true:
+                    parentElement.innerHTML = "";
+                    fetch('/delete-element', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(parentElement.dataset)
+                    }).then((parentAndChild) => parentAndChild)
+
+                    //json.stringify(parentElement);
+                    //json.stringify(element);
+
+
+            }
+
+        }
+
+    },
+
+    selectToDelete: function (attribute, childDataset, parentDataset) {
+        let element = document.querySelector(`${attribute}`);
+        element.addEventListener("click", function () { dom.deleteElement(element, childDataset, parentDataset)} );
+    },
 };
-dom.loadBoards();
+

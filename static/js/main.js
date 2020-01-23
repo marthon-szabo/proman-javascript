@@ -7,6 +7,7 @@ function init() {
     // loads the boards to the screen
     dom.loadBoards();
 
+    dom.selectToDelete("#card_remove_1", "deleteButtonId", "boardId");
 }
 
 init();
