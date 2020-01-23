@@ -1,15 +1,5 @@
 import connection
 
-
-def get_card_status(status_id):
-    """
-    Find the first status matching the given id
-    :param status_id:
-    :return: str
-    """
-    statuses = persistence.get_statuses()
-    return next((status['title'] for status in statuses if status['id'] == str(status_id)), 'Unknown')
-
 @connection.connection_handler
 def get_boards(cursor):
     cursor.execute("""
@@ -73,3 +63,26 @@ def write_item(cursor, type, title, foreign_id=None, text=None, status=None, use
             return board_id
         except:
             return False
+
+
+@connection.connection_handler
+def delete_element(cursor, element, id):
+    if 'board' in element:
+        cursor.execute("""
+                        DELETE FROM boards
+                        WHERE id = %(id)s;
+                        """,
+                       {'id': id})
+    elif 'col' in element:
+        cursor.execute("""
+                        DELETE FROM columns
+                        WHERE id = %(id)s;
+                        """,
+                       {'id': id})
+
+    elif 'card' in element:
+        cursor.execute("""
+                                DELETE FROM cards
+                                WHERE id = %(id)s;
+                                """,
+                       {'id': id})
