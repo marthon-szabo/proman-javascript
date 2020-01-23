@@ -79,6 +79,16 @@ def write_item(cursor, type, title, foreign_id=None, text=None, status=None, use
         except:
             return False
 
+    elif type == "column":
+        try:
+            cursor.execute("""
+                INSERT INTO columns (title, board_id)
+                VALUES (%(title)s, %(board_id)s)
+            """, {"title": title, "board_id": foreign_id})
+            return cursor.fetchone()
+        except:
+            return False
+
 
 def confirm_password(password, password_confirmation):
     if password == password_confirmation:

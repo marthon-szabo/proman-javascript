@@ -84,6 +84,16 @@ export let dataHandler = {
         this._api_post("/create-new", cardData, (response) => {
             callback(response)
         })
+    },
+    createNewColumn: function (columnTitle, boardId, callback){
+        let columnData = {
+            "type": "column",
+            "title": columnTitle,
+            "foreign_id": boardId
+        };
+        this._api_post("/create-new", columnData, (response) => {
+            callback(response)
+        })
     }
     // here comes more features
 };

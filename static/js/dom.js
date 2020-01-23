@@ -24,6 +24,7 @@ export let dom = {
             });
             eventListeners.toggleBoard(board.id);
             eventListeners.addCardBtn(board.id);
+            eventListeners.addColumnBtn(board.id);
         }
     },
     loadColumns: function(boardId, callback){
@@ -106,7 +107,7 @@ let eventListeners = {
     buttonCreateBoard: function() {
         document.querySelector("#create-board").addEventListener("click", function (event) {
             document.querySelector("#boards").insertAdjacentHTML("afterbegin",
-                `<div id="temporary" name="board">
+                `<div id="temporary">
                     <label for="inp-new-board">Enter the board's title:</label>
                     <input id="inp-new-board" >
                     <button>save</button>
@@ -118,7 +119,7 @@ let eventListeners = {
     forTemporaryElement: function(elementType){
         let tempObj = document.querySelector("#temporary");
         document.addEventListener("click", function(event){
-            if (tempObj !== event.target.parentElement){
+            if (tempObj !== event.target.parentElement){ //outside of tempObj clicks
                 tempObj.remove();
             } else if (event.target === tempObj.querySelector("button")) { // save button
                 switch(elementType){
@@ -144,6 +145,15 @@ let eventListeners = {
                             eventListeners.toggleBoard(response);
                         });
                         break;
+                    case "column":
+                        let columnTitle = tempObj.querySelector("input").value;
+                        let boardId = tempObj.dataset.boardId;
+                        dataHandler.createNewColumn(columnTitle, boardId, function(response){
+                            document.querySelector(`[data-board-id="${boardId}"] > .board-columns`).insertAdjacentHTML(
+                                "beforeend",
+                                templates.column(response, columnTitle)
+                            )
+                        })
                 }
                 tempObj.remove()
             }
@@ -171,7 +181,22 @@ let eventListeners = {
             event.stopPropagation();
             dom.temporaryCard(actualColId);
         })
-    }
+    },
+    addColumnBtn: function(elementId){
+        let element = document.querySelector(`[data-board-id="${elementId}"]`);
+        let button = element.querySelector('.board-add-col');
+        button.addEventListener("click", function(event){
+            element.querySelector(".board-header").insertAdjacentHTML("afterend",
+                `<div id="temporary" data-board-id="${elementId}">
+                    <label for="inp-new-column">Enter the column's title:</label>
+                    <input id="inp-new-column" >
+                    <button>save</button>
+                    </div>`
+            );
+            event.stopPropagation();
+            eventListeners.forTemporaryElement("column");
+        });
+    },
 
 };
 
@@ -188,6 +213,7 @@ let templates = {
         <div class="board-header">
             <span class="board-title">${boardTitle}</span>
             <button class="board-add">Add Card</button>
+            <button class="board-add-col">New Column</button>
             <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
         </div>
         <div class="board-columns flex">                    

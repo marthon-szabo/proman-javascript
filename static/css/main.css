@@ -82,7 +82,7 @@ section.board{
     display: inline-block;
     font-size: 20px;
 }
-.board-title, .board-add, .board-toggle{
+.board-title, .board-add, .board-toggle, .board-add-col {
     display: inline-block;
 }
 
