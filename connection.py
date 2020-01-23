@@ -2,6 +2,7 @@ import psycopg2
 import psycopg2.extras
 import os
 
+
 def get_connection_string():
     # setup connection string
     # to do this, please define these environment variables first
@@ -23,6 +24,7 @@ def get_connection_string():
     else:
         raise KeyError('Some necessary environment variable(s) are not defined')
 
+
 def open_database():
     try:
         connection_string = get_connection_string()
@@ -32,6 +34,7 @@ def open_database():
         print('Database connection problem')
         raise exception
     return connection
+
 
 def connection_handler(function):
     def wrapper(*args, **kwargs):
@@ -43,3 +46,4 @@ def connection_handler(function):
         connection.close()
         return ret_value
     return wrapper
+
