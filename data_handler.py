@@ -47,8 +47,9 @@ def write_item(cursor, type, title, foreign_id, text):
             cursor.execute("""
                 INSERT INTO cards(title, text, col_id)
                 VALUES (%(title)s, %(text)s, %(col_id)s)
+                RETURNING id;
             """, {"title": title, "text": text, "col_id": foreign_id}
             )
-            return True
+            return cursor.fetchone()
         except:
             return False

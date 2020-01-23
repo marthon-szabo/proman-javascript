@@ -104,7 +104,16 @@ export let dom = {
         );
         eventListeners.forTemporaryCard()
     },
-
+    insertCard: function(columnId, cardId, title, text){
+        document.querySelector(`[data-column-id="${columnId}"]`).firstElementChild.insertAdjacentHTML(
+            "afterend",
+            `<div class="card" data-card-id="${cardId}">
+                    <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                    <div class="card-title">${title}</div>
+                    <div class="card-content">${text=== null ? "" : text}</div>
+                    </div>`
+        )
+    },
     // here comes more features
 };
 
@@ -115,10 +124,12 @@ let eventListeners = {
             if (tempObj !== event.target.parentElement){
                 tempObj.remove();
                 document.removeEventListener("click", arguments.callee)
-            } else if (event.target === tempObj.querySelector("button")) {
+            } else if (event.target === tempObj.querySelector("button")) { // save button
                 let title = tempObj.querySelector("textarea").value;
                 let columnId = tempObj.dataset.columnId;
-                dataHandler.createNewCard(title, columnId, function(response){console.log(response)} )
+                dataHandler.createNewCard(title, columnId, function(response){ // the newly created ID comes back in the response
+                    dom.insertCard(columnId, response, title)
+                })
             }
         })
     },

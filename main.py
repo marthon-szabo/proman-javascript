@@ -49,7 +49,7 @@ def receive_data_to_database():
         except:
             text = None
         success = data_handler.write_item(item["type"], item["title"], item["foreign_id"], text)
-        return "data received" if success else "writing failed"
+        return success["id"] if success else "writing failed"
 
     print("this is not supposed to run, GET")
     return None
