@@ -56,7 +56,7 @@ button{
     font-size: 14px;
     font-family: sans-serif;
     padding: 4px 10px;
-    width: 80px;
+    /*width: 80px;*/
 }
 
 .board-container{
