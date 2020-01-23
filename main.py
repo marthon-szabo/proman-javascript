@@ -1,4 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect
+from psycopg2 import IntegrityError
+
 from util import json_response
 
 import data_handler
@@ -52,12 +54,13 @@ def signup():
         password = request.form['password']
         password_confirmation = request.form['confirm_password']
         user_already_registered = data_handler.is_user_already_registered(username)
-        if user_already_registered != 0:
-            passwords_matching = data_handler.confirm_password(password, password_confirmation)
-            if passwords_matching:
-                data_handler.register_user(username, password)
-            return redirect('/login')
-        else:
+        try:
+            if user_already_registered != 0:
+                passwords_matching = data_handler.confirm_password(password, password_confirmation)
+                if passwords_matching:
+                    data_handler.register_user(username, password)
+                return redirect('/login')
+        except IntegrityError:
             return render_template('signup.html')
     return render_template("signup.html")
 

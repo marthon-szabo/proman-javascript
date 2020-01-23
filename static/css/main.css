@@ -1,5 +1,5 @@
 body{
-    min-width: 620px;
+
     background: #ddd url(http://cdn.backgroundhost.com/backgrounds/subtlepatterns/diagonal-noise.png);
     font-family: sans-serif;
 }
@@ -22,7 +22,6 @@ button{
     border-radius: 5px;
     z-index: 2;
     box-sizing: border-box;
-
 }
 
 div {
@@ -34,7 +33,6 @@ div {
     vertical-align: baseline;
 }
 
-
 .signup-signin-text-space {
     position: center;
     z-index: 3;
@@ -42,13 +40,15 @@ div {
     max-height: 999px;
     height: auto;
     opacity: 1;
+    padding: 5px;
 }
 
-::selection {
-    background: #1bb76e;
+input[type=text], [type=password], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
-
-h1, .board-title, .board-column-title{
-    font-weight: 100;
-}
-
