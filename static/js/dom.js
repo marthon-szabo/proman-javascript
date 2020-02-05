@@ -26,6 +26,7 @@ export let dom = {
             eventListeners.addCardBtn(board.id);
             eventListeners.addColumnBtn(board.id);
             eventListeners.addDelBtn("board", board.id);
+            eventListeners.renameElement("board", board.id)
         }
     },
     loadColumns: function(boardId, callback){
@@ -218,7 +219,30 @@ let eventListeners = {
                 event.target.parentElement.parentElement.remove()
             }
         })
-    }
+    },
+    renameElement: function(elementType, elementId){
+        const element = selectors.typeOfElement(elementType, elementId);
+
+        element.addEventListener("click", function(event){
+            if (event.target.matches("[class*='title']")){
+                let originalValue = event.target.textContent;
+                event.target.innerHTML = `<input id="rename" data-type="${elementType}" placeholder="${originalValue}">`;
+                event.stopPropagation();
+                eventListeners.focusInputField("#rename", originalValue)
+            }
+        })
+    },
+    focusInputField: function(querySelectorTxt, originalValue){
+        let selectedElement = document.querySelector(querySelectorTxt);
+        selectedElement.select();
+
+        document.addEventListener("click", function _listener(event){
+            if (event.target !== selectedElement){
+                selectedElement.parentElement.innerHTML = originalValue;
+                event.currentTarget.removeEventListener("click", _listener)
+            }
+        })
+    },
 
 };
 
