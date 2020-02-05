@@ -206,17 +206,8 @@ let eventListeners = {
         });
     },
     addDelBtn: function(elementType, elementId){
-        let element;
-        switch (elementType){
-            case "card":
-                element = document.querySelector(`[data-card-id="${elementId}"]`);
-                break;
-            case "column":
-                element = document.querySelector(`[data-column-id="${elementId}"]`);
-                break;
-            case "board":
-                element = document.querySelector(`[data-board-id="${elementId}"]`);
-        }
+        let element = selectors.typeOfElement(elementType, elementId);
+
         element.addEventListener("click", function(event){
             if (event.target.matches(".delete-button")){
                 dom.deleteElementSecond(this);
@@ -232,7 +223,7 @@ let eventListeners = {
 };
 
 const selectors = {
-    typeOfElement: (elementType, elementId) => {
+    typeOfElement: function(elementType, elementId){
         let element;
         switch (elementType){
             case "card":
