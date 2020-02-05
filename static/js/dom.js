@@ -237,11 +237,19 @@ let eventListeners = {
         selectedElement.select();
 
         document.addEventListener("click", function _listener(event){
+            // outside clicks
             if (event.target !== selectedElement){
                 selectedElement.parentElement.innerHTML = originalValue;
                 event.currentTarget.removeEventListener("click", _listener)
             }
-        })
+            // remaining inside, check for enter key
+        });
+        selectedElement.addEventListener("keyup", function _sendInput(event){
+           if (event.keyCode === 13 ){
+               // get value of input, strip whitespace and compare with original
+               alert(event.target.value);
+           }
+        });
     },
 
 };
