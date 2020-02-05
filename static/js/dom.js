@@ -231,6 +231,23 @@ let eventListeners = {
 
 };
 
+const selectors = {
+    typeOfElement: (elementType, elementId) => {
+        let element;
+        switch (elementType){
+            case "card":
+                element = document.querySelector(`[data-card-id="${elementId}"]`);
+                break;
+            case "column":
+                element = document.querySelector(`[data-column-id="${elementId}"]`);
+                break;
+            case "board":
+                element = document.querySelector(`[data-board-id="${elementId}"]`);
+        }
+        return element
+    },
+};
+
 let templates = {
     card: (cardId, title, text) => {
         return `<div class="card" data-card-id="${cardId}">
