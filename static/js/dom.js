@@ -4,6 +4,7 @@ import { dataHandler } from "./data_handler.js";
 export let dom = {
     init: function () {
         eventListeners.buttonCreateBoard();
+        eventListeners.renameSelectedElement();
         // This function should run once, when the page is loaded.
     },
     loadBoards: function () {
@@ -26,7 +27,7 @@ export let dom = {
             eventListeners.addCardBtn(board.id);
             eventListeners.addColumnBtn(board.id);
             eventListeners.addDelBtn("board", board.id);
-            eventListeners.renameElement("board", board.id)
+
         }
     },
     loadColumns: function(boardId, callback){
@@ -220,26 +221,45 @@ let eventListeners = {
             }
         })
     },
+    // this is not used. Needs to be added to every element. Instead: renameSelectedElement, which is global.
     renameElement: function(elementType, elementId){
         const element = selectors.typeOfElement(elementType, elementId);
 
         element.addEventListener("click", function(event){
             if (event.target.matches("[class*='title']")){
                 let originalValue = event.target.textContent;
-                event.target.innerHTML = `<input id="rename" data-type="${elementType}" placeholder="${originalValue}">`;
+                event.target.innerHTML = `<input id="rename" data-type="${elementType}" data-type-id="${elementId}" placeholder="${originalValue}">`;
                 event.stopPropagation();
-                eventListeners.focusInputField("#rename", originalValue)
+                eventListeners.focusInputField("#rename")
             }
         })
     },
-    focusInputField: function(querySelectorTxt, originalValue){
+    renameSelectedElement: function(){
+        document.addEventListener("click", function(event){
+            // do not let to run if there is another input opened
+            if (document.querySelector("#rename")){
+                return
+            }
+            // get data of clicked element (card, column, board)
+            let {elementType, elementId} = selectors.getTypeAndIdByTitle(event.target);
+
+
+            if (elementId && elementType){
+                let originalValue = event.target.textContent;
+                event.target.innerHTML = `<input id="rename" data-type="${elementType}" data-type-id="${elementId}" placeholder="${originalValue}">`;
+                event.stopPropagation();
+                eventListeners.focusInputField("#rename")
+            }
+        })
+    },
+    focusInputField: function(querySelectorTxt){
         let selectedElement = document.querySelector(querySelectorTxt);
         selectedElement.select();
 
         document.addEventListener("click", function _listener(event){
             // outside clicks
             if (event.target !== selectedElement){
-                selectedElement.parentElement.innerHTML = originalValue;
+                selectedElement.parentElement.innerHTML = selectedElement.getAttribute("placeholder");
                 event.currentTarget.removeEventListener("click", _listener)
             }
             // remaining inside, check for enter key
@@ -247,7 +267,9 @@ let eventListeners = {
         selectedElement.addEventListener("keyup", function _sendInput(event){
            if (event.keyCode === 13 ){
                // get value of input, strip whitespace and compare with original
-               alert(event.target.value);
+               console.log(event.target.value);
+               console.log(`type: ${event.target.dataset.type}`);
+               console.log(event.target.dataset.typeId);
            }
         });
     },
@@ -255,7 +277,25 @@ let eventListeners = {
 };
 
 const selectors = {
-    typeOfElement: (elementType, elementId) => (document.querySelector(`[data-${elementType}-id="${elementId}"]`)),
+    typeOfElement: (elementType, elementId) => (document.querySelector(`[data-${elementType}-id="${elementId}"]`)
+    ),
+    getTypeAndIdByTitle: function(target){
+        let elementType;
+        let elementId;
+        if (target.matches("[class*='title']" && "[class*='column']")){
+                elementType = "column";
+                elementId = event.target.parentElement.dataset.columnId;
+        }
+        if (target.matches("[class*='title']" && "[class*='board']")){
+            elementType = "board";
+            elementId = event.target.parentElement.parentElement.dataset.boardId;
+        }
+        if (target.matches("[class*='title']" && "[class*='card']")){
+            elementType = "card";
+            elementId = event.target.parentElement.dataset.cardId;
+        }
+        return {elementType: elementType, elementId: elementId}
+    }
 
 };
 
@@ -283,7 +323,7 @@ let templates = {
     column: (columnId, columnTitle) => {
         return `<div class="board-column" data-column-id="${columnId}">
                     <div class="column-remove"><i class="fas fa-trash-alt"></i></div>
-                    <div class="board-column-title">${columnTitle}</div>
+                    <div class="column-title">${columnTitle}</div>
                     <div class="board-column-content"></div>
                 </div>`
     }

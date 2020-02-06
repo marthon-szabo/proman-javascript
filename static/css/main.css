@@ -38,7 +38,7 @@ body{
     font-family: sans-serif;
 }
 
-h1, .board-title, .board-column-title{
+h1, .board-title, .column-title{
     font-weight: 100;
 }
 
@@ -113,7 +113,7 @@ section.board{
     background: #eee;
 }
 
-.board-column-title{
+.column-title{
     text-align: center;
 }
 
