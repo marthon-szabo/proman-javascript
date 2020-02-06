@@ -333,8 +333,7 @@ let dragAndDrop = {
         this.container.push(...newElements);
     },
     onDrop: function(el, target){
-            console.log(el.dataset.cardId);
-            console.log(target.parentElement.dataset.columnId);
+            // keyworded parameters, the called function is destructuring them
             dataHandler.sendDraggedCard({
                 cardId: el.dataset.cardId,
                 columnId: target.parentElement.dataset.columnId,
