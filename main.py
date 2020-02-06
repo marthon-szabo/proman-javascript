@@ -78,6 +78,7 @@ def rename_elements():
 def replace_cards():
     if request.method == "POST":
         data = request.get_json()
+        data_handler.set_new_col_for_card(**data)
         return "received"
 
 
