@@ -265,8 +265,19 @@ let eventListeners = {
             // remaining inside, check for enter key
         });
         selectedElement.addEventListener("keyup", function _sendInput(event){
+            //run only if input is present
+            if (!document.querySelector("#rename")){
+                return
+            }
            if (event.keyCode === 13 ){
                // get value of input, strip whitespace and compare with original
+               let userInput = event.target.value.replace(/(^\s+|\s+$)/g,'');
+               let originalValue = event.target.getAttribute("placeholder");
+
+               if ( userInput === "" || userInput === originalValue) {
+                   return
+               }
+
                console.log(event.target.value);
                console.log(`type: ${event.target.dataset.type}`);
                console.log(event.target.dataset.typeId);
@@ -282,17 +293,17 @@ const selectors = {
     getTypeAndIdByTitle: function(target){
         let elementType;
         let elementId;
-        if (target.matches("[class*='title']" && "[class*='column']")){
+        if (target.matches("[class~='column-title']")){
                 elementType = "column";
-                elementId = event.target.parentElement.dataset.columnId;
+                elementId = target.parentElement.dataset.columnId;
         }
-        if (target.matches("[class*='title']" && "[class*='board']")){
+        if (target.matches("[class~='board-title']")){
             elementType = "board";
-            elementId = event.target.parentElement.parentElement.dataset.boardId;
+            elementId = target.parentElement.parentElement.dataset.boardId;
         }
-        if (target.matches("[class*='title']" && "[class*='card']")){
+        if (target.matches("[class~='card-title']")){
             elementType = "card";
-            elementId = event.target.parentElement.dataset.cardId;
+            elementId = target.parentElement.dataset.cardId;
         }
         return {elementType: elementType, elementId: elementId}
     }
