@@ -323,13 +323,24 @@ let dragAndDrop = {
         return document.querySelectorAll(selector)
     },
     startDragula: function(){
-        dragula(this.container);
+        dragula(this.container)
+            .on('drop', this.onDrop);
 
     },
     pushContainer: function(selector){
         let newElements = Array.from(this.$All(selector));
         // spread operator for the values to be pushed, not the array itself
         this.container.push(...newElements);
+    },
+    onDrop: function(el, target){
+            console.log(el.dataset.cardId);
+            console.log(target.parentElement.dataset.columnId);
+            dataHandler.sendDraggedCard({
+                cardId: el.dataset.cardId,
+                columnId: target.parentElement.dataset.columnId,
+                callback: (response) => console.log(response)
+            });
+
     },
 };
 
