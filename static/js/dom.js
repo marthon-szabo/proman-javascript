@@ -277,10 +277,15 @@ let eventListeners = {
                if ( userInput === "" || userInput === originalValue) {
                    return
                }
-
-               console.log(event.target.value);
-               console.log(`type: ${event.target.dataset.type}`);
-               console.log(event.target.dataset.typeId);
+               dataHandler.renameSendData(
+                   event.target.value,
+                   event.target.dataset.type,
+                   event.target.dataset.typeId,
+                   function(response){
+                       console.log(response);
+                       event.target.parentElement.innerHTML = event.target.value
+                   }
+               );
            }
         });
     },

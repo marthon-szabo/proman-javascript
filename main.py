@@ -64,6 +64,15 @@ def receive_data_to_database():
     return None
 
 
+@app.route("/rename", methods=["GET", "POST"])
+@json_response
+def rename_elements():
+    if request.method == "POST":
+        data = request.get_json()
+        success = data_handler.rename_element_new_title(**data)
+        return "new title recorded" if success else "action not successful"
+
+
 def main():
     app.run(debug=True)
 
