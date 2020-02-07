@@ -193,3 +193,11 @@ def rename_element_new_title(cursor, id, type, text):
     """).format(sql.Identifier(tablename)), {"text": text, "id": id})
 
     return cursor.fetchone()
+
+@connection.connection_handler
+def set_new_col_for_card(cursor, column_id, card_id):
+    cursor.execute("""
+    UPDATE cards
+    SET col_id = %(col_id)s
+    WHERE id = %(card_id)s
+    """, {"col_id": column_id, "card_id": card_id})

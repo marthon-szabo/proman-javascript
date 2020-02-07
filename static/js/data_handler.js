@@ -105,5 +105,15 @@ export let dataHandler = {
             callback(response)
         })
     },
+    sendDraggedCard({cardId, columnId, callback}){
+        let data = {
+            "card_id": cardId,
+            "column_id": columnId,
+        };
+        this._api_post("/replace", data, (response) => {
+            callback(response)
+        })
+
+    },
     // here comes more features
 };

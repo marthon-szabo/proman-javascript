@@ -73,6 +73,15 @@ def rename_elements():
         return "new title recorded" if success else "action not successful"
 
 
+@app.route('/replace', methods=["GET", "POST"])
+@json_response
+def replace_cards():
+    if request.method == "POST":
+        data = request.get_json()
+        data_handler.set_new_col_for_card(**data)
+        return "received"
+
+
 def main():
     app.run(debug=True)
 

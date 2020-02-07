@@ -5,6 +5,7 @@ export let dom = {
     init: function () {
         eventListeners.buttonCreateBoard();
         eventListeners.renameSelectedElement();
+        dragAndDrop.startDragula();
         // This function should run once, when the page is loaded.
     },
     loadBoards: function () {
@@ -22,6 +23,7 @@ export let dom = {
             table.insertAdjacentHTML("beforeend", templates.board(board.id, board.title));
             dom.loadColumns(board.id, function() {
                 dom.loadCards(board.id);
+                dragAndDrop.pushContainer(".board-column-content")
             });
             eventListeners.toggleBoard(board.id);
             eventListeners.addCardBtn(board.id);
@@ -51,7 +53,6 @@ export let dom = {
         // retrieves cards and makes showCards called
     },
     showCards: function (cards) {
-        console.log(cards);
         for (let card of cards){
             let insertHere = document.querySelector(`[data-column-id="${card.col_id}"]`).querySelector(".board-column-content");
             insertHere.insertAdjacentHTML("beforeend", templates.card(card.id, card.title, card.text))
@@ -162,8 +163,9 @@ let eventListeners = {
                             document.querySelector(`[data-board-id="${boardId}"] > .board-columns`).insertAdjacentHTML(
                                 "beforeend",
                                 templates.column(response, columnTitle)
-                            )
-                        })
+                            );
+                            dragAndDrop.pushContainer(`[data-column-id="${response}"] > .board-column-content`);
+                        });
                 }
                 tempObj.remove()
             }
@@ -313,6 +315,32 @@ const selectors = {
         return {elementType: elementType, elementId: elementId}
     }
 
+};
+
+let dragAndDrop = {
+    container: [],
+    $All: function(selector){
+        return document.querySelectorAll(selector)
+    },
+    startDragula: function(){
+        dragula(this.container)
+            .on('drop', this.onDrop);
+
+    },
+    pushContainer: function(selector){
+        let newElements = Array.from(this.$All(selector));
+        // spread operator for the values to be pushed, not the array itself
+        this.container.push(...newElements);
+    },
+    onDrop: function(el, target){
+            // keyworded parameters, the called function is destructuring them
+            dataHandler.sendDraggedCard({
+                cardId: el.dataset.cardId,
+                columnId: target.parentElement.dataset.columnId,
+                callback: (response) => console.log(response)
+            });
+
+    },
 };
 
 let templates = {
