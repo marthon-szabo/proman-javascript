@@ -1,6 +1,7 @@
 import connection
 import persistence
 import bcrypt
+from psycopg2 import sql
 
 
 def get_card_status(status_id):
@@ -174,3 +175,21 @@ def delete_element(cursor, element, id):
                                 WHERE id = %(id)s;
                                 """,{'id': id})
 
+@connection.connection_handler
+def rename_element_new_title(cursor, id, type, text):
+    tablename = ""
+    if type == "board":
+        tablename = "boards"
+    elif type == "column":
+        tablename = "columns"
+    elif type == "card":
+        tablename = "cards"
+
+    cursor.execute(sql.SQL("""
+        UPDATE {0}
+        SET title = %(text)s
+        WHERE id = %(id)s
+        RETURNING title
+    """).format(sql.Identifier(tablename)), {"text": text, "id": id})
+
+    return cursor.fetchone()

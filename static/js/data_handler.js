@@ -94,6 +94,16 @@ export let dataHandler = {
         this._api_post("/create-new", columnData, (response) => {
             callback(response)
         })
-    }
+    },
+    renameSendData(value, elementType, elementId, callback){
+        let data = {
+            "type": elementType,
+            "id": elementId,
+            "text": value,
+        };
+        this._api_post("/rename", data, (response) => {
+            callback(response)
+        })
+    },
     // here comes more features
 };
